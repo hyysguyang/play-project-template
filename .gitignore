@@ -2,6 +2,7 @@
 *.class
 *.log
 .demo_data
+logs
 classes
 target
 target-eclipse

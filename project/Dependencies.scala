@@ -15,10 +15,14 @@ object Dependencies {
   val scalateCore = "org.scalatra.scalate" %% "scalate-core" % "1.7.0" notTransitive()
 
   val webjars="org.webjars" %% "webjars-play" % "2.3.0-3"
-  val playSlick="com.typesafe.play" %% "play-slick" % "0.8.1"
+  val playSlick="com.typesafe.play" %% "play-slick" % "1.0.0"
+  val playSlickEvolutions=  "com.typesafe.play" %% "play-slick-evolutions" % "1.0.0"
 
   val scalatest = "org.scalatest" %% "scalatest" % "2.2.4"
+  val scalatestPlay = "org.scalatestplus" %% "play" % "1.4.0-M3"
   val seleniumJava="org.seleniumhq.selenium" % "selenium-java" % "2.45.0"
+
+  val h2="com.h2database" % "h2" % "1.4.177"
 
 
 

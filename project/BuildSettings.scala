@@ -8,7 +8,7 @@ import sbt._
 object BuildSettings {
   val VERSION = "0.0.1-SNAPSHOT"
 
-  val lifecycle=addCommandAlias("install", ";test;it:test;publishLocal") ++ addCommandAlias("testing", ";test;it:test")
+  val lifecycle = addCommandAlias("install", ";test;it:test;publishLocal") ++ addCommandAlias("testing", ";test;it:test")
 
   val basicSettings = Defaults.coreDefaultSettings ++ lifecycle ++ Seq(
     version := VERSION,
@@ -39,21 +39,34 @@ object BuildSettings {
       publishMavenStyle := true
     )
 
-  import com.typesafe.sbt.web.Import
-  import play.PlayImport.PlayKeys
+  import play.sbt.routes.RoutesKeys._
+  import com.typesafe.sbt.web.SbtWeb.autoImport._
+  import com.typesafe.sbt.packager.universal.UniversalPlugin.autoImport._
   lazy val playCustomizedSettings =
     Seq(
-      sourceDirectory in Compile <<= baseDirectory(_ / "src" / "main"),
-      sourceDirectory in Test <<= baseDirectory(_ / "src" / "test"),
-      scalaSource in Compile <<= (sourceDirectory in Compile)(_ / "scala"),
-      scalaSource in Test <<= (sourceDirectory in Test)(_ / "scala"),
-      javaSource in Compile <<= (sourceDirectory in Compile)(_ / "java"),
-      javaSource in Test <<= (sourceDirectory in Test)(_ / "java"),
-      resourceDirectory in Compile <<= (sourceDirectory in Compile)(_ / "resources"),
-      PlayKeys.confDirectory <<= ((sourceDirectory in Compile))(_ / "conf"),
-      unmanagedResourceDirectories in Compile += (sourceDirectory in Compile).value / "conf",
-      resourceDirectory in Import.Assets <<=  (sourceDirectory in Compile)(_ / "public"),
-      resourceDirectory in Import.TestAssets <<= (sourceDirectory in Test)(_ / "public")
+      routesGenerator := InjectedRoutesGenerator,
+
+    //Reset the project layout to sbt standard. Currently, we use disablePlugins(PlayLayoutPlugin)
+
+//      sourceDirectory in Compile := baseDirectory.value / "src" / "main",
+//      sourceDirectory in Test := baseDirectory.value / "src" / "test",
+//
+//      scalaSource in Compile := (sourceDirectory in Compile).value / "scala",
+//      scalaSource in Test := (sourceDirectory in Test).value / "scala",
+//
+//      javaSource in Compile := (sourceDirectory in Compile).value / "java",
+//      javaSource in Test := (sourceDirectory in Test).value / "java",
+//
+//      resourceDirectory in Compile <<= (sourceDirectory in Compile)(_ / "resources"),
+//
+//      // sbt-web
+//      sourceDirectory in Assets := (sourceDirectory in Compile).value / "assets",
+//      sourceDirectory in TestAssets := (sourceDirectory in Test).value / "assets",
+//      resourceDirectory in Assets := (sourceDirectory in Compile).value / "public",
+
+      // Native packager
+      sourceDirectory in Universal := target.value / "dist"
+
     )
 
   lazy val itSettings = Defaults.itSettings ++ Seq(
